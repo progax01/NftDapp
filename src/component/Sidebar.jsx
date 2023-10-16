@@ -146,7 +146,7 @@ export default function MiniDrawer() {
         <Divider />
         <List >
           {[ {text: 'Dashboard', path:'/dashboard'},
-            {text: 'KYC Form', path:'/myform'},
+            {text: 'Upload to IPFS', path:'/upload'},
             { text: 'View KYC Details', path:'/view-kyc'},
             {text: 'Check Verification', path:'/check-verification'},
           ].map((item, index) => (

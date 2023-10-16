@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import ViewKyc from './section/ViewKyc';
 import CheckVerification from './section/CheckVerification';
+import Upload from './section/Upload';
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
       <Routes>
         <Route path="/" element={<MetaMaskSignIn />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/myform" element={<MyForm />} />
+        <Route path="/upload" element={<Upload />} />
         <Route path="/view-kyc" element={<ViewKyc />} />
         <Route path="/check-verification" element={<CheckVerification />} />
 

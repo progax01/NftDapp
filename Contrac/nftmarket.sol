@@ -7,10 +7,12 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/interfaces/IERC2981.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
+//https://orange-absolute-barracuda-733.mypinata.cloud/ipfs/Qma34JYoFDhwy4B3nMqodPUhhXzTt2xgeQ6FRXRwhdqTee/1.json
+
 contract NFTMarketplace is  ERC721URIStorage,   IERC2981 {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIdCounter;
-    mapping (address => mapping( uint => bool)) isSell;
+
     string public baseTokenURI;
     uint256 public royaltyPercentage = 10; // 100 represents 1%, you can adjust this
     address contractOwner;
@@ -19,10 +21,12 @@ contract NFTMarketplace is  ERC721URIStorage,   IERC2981 {
         uint256 price;
     }
 
+    mapping (address => mapping( uint => bool)) isSell;
+    mapping (address => mapping( uint => bool)) isSold;
     mapping(uint256 => NFT) public nfts;
 
     constructor( ) ERC721("My Nft", "MNFT")  
-     {
+    {
        contractOwner= msg.sender;
     }
 
@@ -36,7 +40,9 @@ contract NFTMarketplace is  ERC721URIStorage,   IERC2981 {
         _safeMint(msg.sender, tokenId);
         _setTokenURI(tokenId, tokenURI);
          nfts[tokenId]= NFT(msg.sender, price);
-        _tokenIdCounter.increment();
+        isSold [msg.sender][tokenId]=false;
+       _tokenIdCounter.increment();
+
     }
 
     function SellNft(uint tokenId) public  {
@@ -44,10 +50,37 @@ contract NFTMarketplace is  ERC721URIStorage,   IERC2981 {
         isSell[msg.sender][tokenId]=true;
     }
 
+    function SoldNft (uint tokenids) public view returns (bool) {
+        address ads= ownerOf(tokenids);
+        return isSold[ads][tokenids];
+    }
+
+    function isSellNft (uint tokenid) public view returns (bool) {
+        address ad = ownerOf(tokenid);
+        return isSell[ad][tokenid];
+    }
+
+    function KnowPrice( uint tokenIds) public view returns (uint) {
+
+        NFT memory info = nfts[tokenIds];
+        return info.price;
+
+    }
+
+    function getBalance(address ads) public view returns (uint256) {
+        
+      return ads.balance;
+    }
+
+    function getTotalToken() public view returns(uint){
+        return _tokenIdCounter.current();
+    }
 
     function BuyNFT(uint256 tokenId) public payable  {
-     
+        
         address tokenOwner = ownerOf(tokenId);
+        require(isSell[tokenOwner][tokenId]== true, "Token is not at sale");
+
         address buyer = msg.sender;
         uint256 price = nfts[tokenId].price;
         require(tokenOwner != buyer, "Cannot buy your own NFT");
@@ -55,8 +88,8 @@ contract NFTMarketplace is  ERC721URIStorage,   IERC2981 {
 
         // Transfer the NFT to the buyer
         _transfer(tokenOwner, buyer, tokenId);
+
         // Pay royalties to the contract creator
-      
         uint256 royalties = (price * royaltyPercentage) / 100; // Calculate royalties
         payable(contractOwner).transfer(royalties); // Pay the royalties to the creator
 
