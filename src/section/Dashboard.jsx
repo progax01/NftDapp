@@ -12,7 +12,7 @@ const DashboardPage = () => {
     <Layout>
       <DashboardContainer>
         {/* Your dashboard content goes here */}
-        <h1>Complete your KYC</h1>
+        <h1>NFT Market Place</h1>
         <MyForm />
       </DashboardContainer>
     </Layout>
