@@ -3,7 +3,7 @@ import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ContractConnect from "./ContractConnect";
+import ContractConnect from "./MintNFT";
 import Layout from "../component/Layout";
 // import uploadImage from "../component/PinataFile";
 // import { uploadImageToIPFS } from "./IPFSUtils";
