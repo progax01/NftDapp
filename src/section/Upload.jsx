@@ -56,7 +56,7 @@ function Upload() {
       if (window.ethereum) {
         try {
           const web3 = new Web3(window.ethereum);
-          await window.ethereum.enable();
+         // await window.ethereum.enable();
           const contract = new web3.eth.Contract(contractABI, contractAddress);
           setWeb3(web3);
           setContract(contract);
@@ -147,6 +147,34 @@ function Upload() {
     }
   };
 
+  const mintNFT = async (tokenURI, price) => {
+    if (!web3 || !contract || !tokenURI) {
+      console.error('Web3, contract, or tokenURI not initialized.');
+      return;
+    }
+  
+    const accounts = await web3.eth.getAccounts();
+  
+    if (accounts.length === 0) {
+      console.error('No Ethereum accounts available. Please unlock your wallet.');
+      return;
+    }
+  
+    const sender = accounts[0];
+  
+    try {
+      // Mint the NFT by calling the contract's mintNFT function
+      const Price = parseInt(price);
+      const tx = await contract.methods.mintNFT(tokenURI, Price).send({ from: sender });
+      console.log('Transaction Hash:', tx.transactionHash);
+      toast.success("NFT Minted Successfully!");
+      // Handle success (e.g., show a success message)
+    } catch (error) {
+      console.error('Mint NFT error:', error);
+      // Handle error (e.g., show an error message)
+    }
+  };
+  
   const handleUpload = async () => {
     try {
       const hash = await uploadImage();
@@ -160,7 +188,7 @@ function Upload() {
       toast.success("NFT metadata uploaded successfully!");
 
       const Uri = `https://ipfs.io/ipfs/${metadataCID}`;
-      setUri(Uri);
+     // setUri(Uri);
       console.log(Uri, "new URI IS", uri);
       mintNFT(Uri,  price);
       // Reset the form
@@ -171,33 +199,7 @@ function Upload() {
   };
 
   
-const mintNFT = async (tokenURI, price) => {
-  if (!web3 || !contract || !tokenURI) {
-    console.error('Web3, contract, or tokenURI not initialized.');
-    return;
-  }
 
-  const accounts = await web3.eth.getAccounts();
-
-  if (accounts.length === 0) {
-    console.error('No Ethereum accounts available. Please unlock your wallet.');
-    return;
-  }
-
-  const sender = accounts[0];
-
-  try {
-    // Mint the NFT by calling the contract's mintNFT function
-    const Price = parseInt(price);
-    const tx = await contract.methods.mintNFT(tokenURI, Price).send({ from: sender });
-    console.log('Transaction Hash:', tx.transactionHash);
-    toast.success("NFT Minted Successfully!");
-    // Handle success (e.g., show a success message)
-  } catch (error) {
-    console.error('Mint NFT error:', error);
-    // Handle error (e.g., show an error message)
-  }
-};
 
   return (
     <Layout>
