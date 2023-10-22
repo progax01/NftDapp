@@ -6,7 +6,7 @@ import "./index.css";
 
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
-import CheckVerification from './section/CheckVerification';
+
 import Upload from './section/Upload';
 import Market from './section/Market';
 import MyNft from './section/MyNft';
@@ -20,8 +20,6 @@ function App() {
         <Route path="/" element={<MetaMaskSignIn />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/upload" element={<Upload />} />
- 
-        <Route path="/check-verification" element={<CheckVerification />} />
         <Route path='/market-place' element= {<Market/>} />
         <Route path = '/my-nft' element={<MyNft/>} />
       </Routes>
