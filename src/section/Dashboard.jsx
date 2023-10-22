@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import MyForm from './MyForm';
+ 
 import Layout from '../component/Layout';
 
 const DashboardContainer = styled.div`
@@ -13,7 +13,7 @@ const DashboardPage = () => {
       <DashboardContainer>
         {/* Your dashboard content goes here */}
         <h1>NFT Market Place</h1>
-        <MyForm />
+       
       </DashboardContainer>
     </Layout>
   );

@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.21+commit.d9974bed"
+		"version": "0.8.20+commit.a1b79de6"
 	},
 	"language": "Solidity",
 	"output": {
@@ -373,6 +373,25 @@
 				"type": "function"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					}
+				],
+				"name": "getOwnedNFTs",
+				"outputs": [
+					{
+						"internalType": "uint256[]",
+						"name": "",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "getTotalToken",
 				"outputs": [
@@ -629,6 +648,19 @@
 			{
 				"inputs": [
 					{
+						"internalType": "uint256",
+						"name": "_percentage",
+						"type": "uint256"
+					}
+				],
+				"name": "setRoyality",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "bytes4",
 						"name": "interfaceId",
 						"type": "bytes4"
@@ -672,6 +704,19 @@
 						"internalType": "string",
 						"name": "",
 						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "totalSupply",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
@@ -991,11 +1036,11 @@
 			]
 		},
 		"nftmarket.sol": {
-			"keccak256": "0xbf86d177eaaabffac9f42cb4577f8d19004d73e62f849c1177bf155e7d92c7f4",
+			"keccak256": "0xf56aa1558e21a9eb601b3fc0d41868150a5709f182b0743b3e55c4fed2e54952",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://68f041fbf575a5d336f1cb5e8735fd95dbb27aeb755dc5a38bc726c6ce7970e9",
-				"dweb:/ipfs/QmYkoaSG8iK1CzZpvPVSGHGnFTFhX2rpVxV3sZvYuFmNJ8"
+				"bzz-raw://1dc25933c2e7669ebdb18e5f7ff33f6261ce7b3a5040b425755c36f12cc7a6a5",
+				"dweb:/ipfs/QmZMqDWjN7Qn5K3NJWG9DBroLdqXav4LWuApnHkQEiV6o1"
 			]
 		}
 	},

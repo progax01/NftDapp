@@ -1,0 +1,59 @@
+{
+	"compiler": {
+		"version": "0.8.20+commit.a1b79de6"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"name": "MathOverflowedMulDiv",
+				"type": "error"
+			}
+		],
+		"devdoc": {
+			"details": "Standard math utilities missing in the Solidity language.",
+			"errors": {
+				"MathOverflowedMulDiv()": [
+					{
+						"details": "Muldiv operation overflow."
+					}
+				]
+			},
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"nftmarket_flattened.sol": "Math"
+		},
+		"evmVersion": "shanghai",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"nftmarket_flattened.sol": {
+			"keccak256": "0x2797fc88e98431595705f3e09423629992e760eca3a27a70a41e04d09cf2f126",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://67d1d094233111ae1b879cfe55ea97e40d3e268e048294959a6e174910b062b5",
+				"dweb:/ipfs/QmXx2nwcDgdNof3MGevVngE1ckCJKu5GFkQQ6yErFoNpRW"
+			]
+		}
+	},
+	"version": 1
+}

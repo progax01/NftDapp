@@ -3,12 +3,14 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import MetaMaskSignIn from './MetaMaskSignIn';
 import Dashboard from './section/Dashboard';
 import "./index.css";
-import MyForm from './section/MyForm';
+
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
-import ViewKyc from './section/ViewKyc';
 import CheckVerification from './section/CheckVerification';
 import Upload from './section/Upload';
+import Market from './section/Market';
+import MyNft from './section/MyNft';
+ 
 
 function App() {
   return (
@@ -18,9 +20,10 @@ function App() {
         <Route path="/" element={<MetaMaskSignIn />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/upload" element={<Upload />} />
-        <Route path="/view-kyc" element={<ViewKyc />} />
+ 
         <Route path="/check-verification" element={<CheckVerification />} />
-
+        <Route path='/market-place' element= {<Market/>} />
+        <Route path = '/my-nft' element={<MyNft/>} />
       </Routes>
     </Router>
   );
