@@ -25,6 +25,7 @@ function Market() {
         try {
           const acc = await web3Instance.eth.requestAccounts();
           setAccounts(acc);
+          console.log(acc);
         } catch (error) {
           console.error("Access to your Ethereum account denied.");
         }
@@ -39,22 +40,29 @@ function Market() {
   useEffect(() => {
     async function fetchMarketplaceNFTs() {
       // Assuming your contract ABI and address are properly set up
+      
       const NftContract = new web3.eth.Contract(contractABI, contractAddress);
       setNftContract(NftContract);
+
       const tokenCount = await NftContract.methods.getTotalToken().call();
       const nfts = [];
+      console.log(nfts);
 
       for (let i = 0; i < tokenCount; i++) {
         const tokenId = i;
         const owner = await NftContract.methods.ownerOf(tokenId).call();
         const tokenURI = await NftContract.methods.tokenURI(tokenId).call();
 
+        const isTokenForSale = await NftContract.methods.isSellNft(tokenId).call();
+        //console.log(owner,typeof owner, accounts , typeof accounts);
+        const isOwner = owner  ;
+
         // Fetch NFT metadata from the tokenURI
         const metadataResponse = await Axios.get(tokenURI);
-        const { image, price } = metadataResponse.data;
+        const { image, price, name } = metadataResponse.data;
 
-        nfts.push({ tokenId, owner, tokenURI, image, price });
-        console.log(nfts);
+       nfts.push({ tokenId, owner, tokenURI, image, price, name, isTokenForSale, isOwner });
+      console.log(nfts);
       }
 
       setMarketplaceNFTs(nfts);
@@ -63,7 +71,7 @@ function Market() {
     if (web3) {
       fetchMarketplaceNFTs();
     }
-  }, [web3]);
+  },  [web3]);
 
   const buyNFT = async (tokenId, price) => {
     if (!web3) {
@@ -79,14 +87,15 @@ function Market() {
       const tokenOwner = await NftContract.methods.ownerOf(tokenId).call();
       const isTokenForSale = await NftContract.methods.isSellNft(tokenId).call();
       const buyer = accounts[0];
+      console.log(accounts[0], accounts);
+      
+          if ( buyer === tokenOwner) {
+            toast.error("You can't buy your own NFT");
+            return;
+          }
   
       if (!isTokenForSale) {
         toast.error('Token is not for sale');
-        return;
-      }
-  
-      if (tokenOwner === buyer) {
-        toast.error("You can't buy your own NFT");
         return;
       }
 
@@ -101,8 +110,10 @@ function Market() {
         value,
       };
       console.log(tx);
-      web3.eth.sendTransaction(tx).on('transactionHash', (hash)=> {
+   const receipts= await web3.eth.sendTransaction(tx).on('transactionHash', (hash)=> {
         console.log(`hash is ${hash}`);
+        toast.success(`NFT Buy successfully! ${hash}`);
+
       })
 
       .on('confirmation', (confirmationNumber, receipt) => {
@@ -111,20 +122,62 @@ function Market() {
         console.log('Transaction receipt:', receipt);
       })
      
-      toast.success('NFT purchased successfully');
     } catch (error) {
       toast.error('Error while buying NFT');
       console.error(error);
     }
   };
 
+  const sellNFT = async (tokenId) => {
+    try {
+      if (!web3 || !NftContract) {
+        toast.error('Web3 or contract not available');
+        return;
+      }
+
+      const gas = 500000; // Adjust based on your contract
+      const seller = accounts[0];
+
+      const isOwner = marketplaceNFTs.find((nft) => nft.tokenId === tokenId && nft.isOwner);
+
+      if (!isOwner) {
+        toast.error("You can only sell your own NFT");
+        return;
+      }
+      const processingMessageId = toast.info('Processing your transaction...');
+
+      // Call the sellNft function
+      const txdata = await NftContract.methods.SellNft(tokenId).encodeABI();
+
+      const tx = {
+        from: seller,
+        to: contractAddress,
+        data: txdata,
+        gas,
+      };
+
+     const recpt= await web3.eth.sendTransaction(tx)
+        .on('transactionHash', (hash) => {
+          toast.dismiss(processingMessageId);
+          toast.success('Transaction submitted: ' + hash);
+          console.log(`hash is ${hash}`);
+        })
+        .on('confirmation', (confirmationNumber,  receipt) => {
+          console.log(`Confirmation number: ${confirmationNumber}`);
+          console.log('Transaction receipt:', tx.receipt);
+        });
+
+    } catch (error) {
+      toast.error('Error while putting NFT up for sale');
+      console.error(error);
+    }
+  };
   return (
     <Layout>
       <div className="mt-10">
-        <h1> NFT Market</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-5">
+        <h1>NFT Market</h1>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 pt-5">
           {marketplaceNFTs.map((nft) => (
-        
             <Card key={nft.tokenId}>
               <CardMedia
                 component="img"
@@ -132,15 +185,28 @@ function Market() {
                 height="200"
                 image={nft.image}
               />
-              <CardContent>
-                <p>Price: {nft.price} ETH</p>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => buyNFT(nft.tokenId, nft.price)}
-                >
-                  Buy
-                </Button>
+              <CardContent className="text-center">
+                <h2 className="text-lg font-semibold">Name: {nft.name}</h2>
+                <p>Price: {nft.price} WEI</p>
+                {nft.isTokenForSale ? (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => buyNFT(nft.tokenId, nft.price)}
+                  >
+                    Buy
+                  </Button>
+                ) : (
+                 
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => sellNFT(nft.tokenId)}
+                    >
+                      Sell
+                    </Button>
+                  )
+                 }
               </CardContent>
             </Card>
           ))}

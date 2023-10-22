@@ -47,11 +47,13 @@ function MyNft() {
         const metadataPromises = ownedNFTsResult.map(async (tokenId) => {
           const tokenURI = await NftContract.methods.tokenURI(tokenId).call();
           const metadataResponse = await Axios.get(tokenURI);
+          //console.log(metadataResponse.data);
           return metadataResponse.data; // Assuming the metadata contains an 'image' property
         });
 
         Promise.all(metadataPromises).then((metadata) => {
           setNftMetadata(metadata);
+          //console.log(nftMetadata )
         });
       }
     }
@@ -63,17 +65,21 @@ function MyNft() {
     <Layout>
       <div className="mt-10">
         <h1>Your Owned NFTs</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 pt-5">
           {ownedNFTs.map((tokenId, index) => (
             <Card key={tokenId}>
               <CardMedia
                 component="img"
                 alt="NFT"
-                height="200"
+                height="300"
                 image={nftMetadata[index]?.image || 'img'} // Provide a placeholder image URL
               />
               <CardContent>
-                <p>Token ID: {tokenId}</p>
+              <p className="font-semibold text-lg">Name: {nftMetadata[index]?.name || 'N/A'}</p>
+              <p>Description: {nftMetadata[index]?.description || 'N/A'}</p>
+              <p>Name: {nftMetadata[index]?.name || 'N/A'}</p>
+              <p>Price: {nftMetadata[index]?.price || 'N/A'} Wei</p>
+
               </CardContent>
             </Card>
           ))}
