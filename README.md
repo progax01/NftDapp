@@ -1,8 +1,12 @@
-# React + Vite
+# NFT Market Place
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Best Place to Mint NFT, Buy NFT and Earn ETH. Share to earn more ETH.
 
-Currently, two official plugins are available:
+Easy UI/UX for user.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# Requirnments 
+
+* MetaMask Wallet must be installed.
+
+
+# Happy Earning
