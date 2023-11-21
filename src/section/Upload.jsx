@@ -100,11 +100,8 @@ function Upload() {
       );
 
       const resData = await res.data;
-      
       const uploadhash = await resData.IpfsHash;
       setImageCID(uploadhash);
-      //console.log("my cid has", imageCID);
-      
       return resData.IpfsHash;
     } catch (error) {
       console.error(error);
@@ -115,12 +112,15 @@ function Upload() {
 
   const uploadMetadata = async () => {
     try {
+
+       const cid = await uploadImage();
+       console.log("cid", cid)
       const data = JSON.stringify({
         pinataContent: {
           name,
           description,
           price,
-          image: `https://ipfs.io/ipfs/${imageCID}`,
+          image: `https://ipfs.io/ipfs/${cid}`,
         },
         pinataMetadata: {
           name: name,
@@ -208,9 +208,9 @@ function Upload() {
 
   const handleUpload = async () => {
     try {
-      const hash = await uploadImage();
+      // const hash = await uploadImage();
 
-      setImageCID(hash);
+      // setImageCID(hash);
 
       const metadataCID = await uploadMetadata();
       //console.log("maetadata", metadataCID, typeof metadataCID);
